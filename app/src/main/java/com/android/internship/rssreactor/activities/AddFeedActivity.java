@@ -38,11 +38,9 @@ public class AddFeedActivity extends AppCompatActivity {
                 String name = mEditFeedName.getText().toString();
                 String url = mEditFeedURL.getText().toString();
                 Intent intent = new Intent(AddFeedActivity.this, FeedsActivity.class);
-                Bundle extras = new Bundle();
-                extras.putString("name", name);
-                extras.putString("url", url);
-                intent.putExtras(extras);
-                setResult(200, intent);
+                intent.putExtra("name", name);
+                intent.putExtra("url", url);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -72,14 +70,10 @@ public class AddFeedActivity extends AppCompatActivity {
         String s1 = mEditFeedName.getText().toString();
         String s2 = mEditFeedURL.getText().toString();
 
-        if(s1.equals("") && s2.equals("")) {
-            b.setEnabled(false);
-        } else if(!s1.equals("")&&s2.equals("")){
-            b.setEnabled(false);
-        } else if(!s2.equals("")&&s1.equals("")) {
-            b.setEnabled(false);
-        } else {
+        if(!(s1.equals("")) && !(s2.equals(""))) {
             b.setEnabled(true);
+        } else {
+            b.setEnabled(false);
         }
     }
 }

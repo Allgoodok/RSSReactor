@@ -1,6 +1,5 @@
 package com.android.internship.rssreactor.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -47,7 +46,6 @@ public class FeedsItemsActivity extends AppCompatActivity implements SwipeRefres
         TITLE, DATE, LINK, CONTENT, IGNORETAG;
     }
 
-    private Context context;
     private ListView mListFeedItems;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private FeedDataAdapter adapter;
@@ -60,7 +58,7 @@ public class FeedsItemsActivity extends AppCompatActivity implements SwipeRefres
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        context = this;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feeds_items);
 
@@ -95,7 +93,7 @@ public class FeedsItemsActivity extends AppCompatActivity implements SwipeRefres
 
                     @Override
                     public void run() {
-                        getRSSFeedFeature = new GetRSSFeedFeature(context, urlFeed);
+                        getRSSFeedFeature = new GetRSSFeedFeature(urlFeed);
                         getRSSFeedFeature.execute();
                     }
                 });
@@ -149,7 +147,7 @@ public class FeedsItemsActivity extends AppCompatActivity implements SwipeRefres
 
     @Override
     public void onRefresh() {
-        getRSSFeedFeature = new GetRSSFeedFeature(this, urlFeed);
+        getRSSFeedFeature = new GetRSSFeedFeature(urlFeed);
         getRSSFeedFeature.execute();
     }
 
@@ -168,11 +166,9 @@ public class FeedsItemsActivity extends AppCompatActivity implements SwipeRefres
 
     private class GetRSSFeedFeature extends AsyncTask<String, Integer, ArrayList<FeedData>>{
         private RSSXMLTag currentTag;
-        private Context context;
         private String urlFeed;
 
-        public GetRSSFeedFeature(Context context, String urlFeed) {
-            this.context = context;
+        public GetRSSFeedFeature( String urlFeed) {
             this.urlFeed = urlFeed;
         }
 
@@ -295,7 +291,7 @@ public class FeedsItemsActivity extends AppCompatActivity implements SwipeRefres
         protected void onPostExecute(ArrayList<FeedData> result) {
             // TODO Auto-generated method stub
             mSwipeRefreshLayout.setRefreshing(true);
-            adapter = new FeedDataAdapter(context, result);
+            adapter = new FeedDataAdapter(FeedsItemsActivity.this, result);
             mListFeedItems.setAdapter(adapter);
             mSwipeRefreshLayout.setRefreshing(false);
 

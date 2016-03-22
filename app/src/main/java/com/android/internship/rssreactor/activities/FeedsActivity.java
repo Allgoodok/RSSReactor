@@ -1,6 +1,5 @@
 package com.android.internship.rssreactor.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,7 +27,7 @@ public class FeedsActivity extends AppCompatActivity {
     private FeedsAdapter adapter;
     private RSSFeedDbHelper mDbHelperRead;
     private ArrayList<Feeds> feedsArrayList;
-    private Context context;
+    static final int REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,6 @@ public class FeedsActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.feedsView);
         mAddButton = (ImageButton) findViewById(R.id.btn_AddMore);
         mEditText = (EditText) findViewById(R.id.editText);
-        context = this;
 
         mDbHelperRead = new RSSFeedDbHelper(this);
 
@@ -60,7 +58,7 @@ public class FeedsActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Feeds feedToDelete = (Feeds) adapter.getItem(position);
                 mDbHelperRead.deleteFeed(Long.parseLong(feedToDelete.getId()));
-                adapter.update(context, feedsArrayList);
+                adapter.update(FeedsActivity.this, feedsArrayList);
                 return true;
             }
         });
@@ -70,7 +68,7 @@ public class FeedsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(FeedsActivity.this, AddFeedActivity.class);
 
-                startActivityForResult(intent, 200);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
 
@@ -99,11 +97,10 @@ public class FeedsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==200) {
-            if (requestCode == 200) {
+        if (resultCode==RESULT_OK) {
+            if (requestCode == REQUEST_CODE) {
                 final RSSFeedDbHelper mDbHelperWrite = new RSSFeedDbHelper(this);
-                Bundle extras = data.getExtras();
-                mDbHelperWrite.putFeed(extras.getString("name"), extras.getString("url"));
+                mDbHelperWrite.putFeed(data.getExtras().getString("name"), data.getExtras().getString("url"));
                 adapter.update(this, feedsArrayList);
             }
         }

@@ -10,7 +10,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.FeedsActivity">
+        <activity android:name=".activities.FeedsActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -18,11 +19,14 @@
         </activity>
         <activity
             android:name=".activities.AddFeedActivity"
-            android:label="@string/title_activity_add_feed" />
-        <activity android:name=".activities.FeedsItemsActivity">
+            android:label="@string/title_activity_add_feed"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.FeedsItemsActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.FeedItemWebView"
-            android:parentActivityName=".activities.FeedsItemsActivity">
+            android:parentActivityName=".activities.FeedsItemsActivity"
+            android:screenOrientation="portrait">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -24,7 +24,6 @@ public class FeedItemWebView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_item_web_view);
-        final Activity activity = this;
 
         mWebView = (WebView) findViewById(R.id.webview);
         mToolBar = (Toolbar) findViewById(R.id.toolbarWebView);
@@ -45,7 +44,7 @@ public class FeedItemWebView extends AppCompatActivity {
 
         mWebView.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                Toast.makeText(activity, description, Toast.LENGTH_SHORT).show();
+                Toast.makeText(FeedItemWebView.this, description, Toast.LENGTH_SHORT).show();
             }
         });
         mWebView.loadUrl(urlItem);
