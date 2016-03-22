@@ -1,4 +1,4 @@
-package com.android.internship.rssreactor;
+package com.android.internship.rssreactor.database;
 
 import android.provider.BaseColumns;
 
