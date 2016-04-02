@@ -172,6 +172,21 @@ public class FeedsItemsActivity extends AppCompatActivity implements SwipeRefres
             this.urlFeed = urlFeed;
         }
 
+        Date tryParse(String dateString)
+        {
+             String[] dateTypes = {"EEE, dd MMM yyyy HH:mm:ss Z", "EEE, dd MMM yy HH:mm:ss Z"};
+            for (String formatString : dateTypes)
+            {
+                try
+                {
+                    return new SimpleDateFormat(formatString, Locale.US).parse(dateString);
+                }
+                catch (ParseException e) {}
+            }
+
+            return null;
+        }
+
         @Override
         protected ArrayList<FeedData> doInBackground(String... params) {
             // TODO Auto-generated method stub
@@ -199,7 +214,7 @@ public class FeedsItemsActivity extends AppCompatActivity implements SwipeRefres
 
                 int eventType = xpp.getEventType();
                 FeedData pdData = null;
-                SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
+                //SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
                 while (eventType != XmlPullParser.END_DOCUMENT) {
                     if (eventType == XmlPullParser.START_DOCUMENT) {
                     } else if (eventType == XmlPullParser.START_TAG) {
@@ -211,7 +226,7 @@ public class FeedsItemsActivity extends AppCompatActivity implements SwipeRefres
                         } else if (xpp.getName().equals("link")) {
                             currentTag = RSSXMLTag.LINK;
                         } else if (xpp.getName().equals("pubDate")) {
-                            currentTag = RSSXMLTag.DATE;
+                                currentTag = RSSXMLTag.DATE;
                         }else if (xpp.getName().equals("thumbnail")){
                                 pdData.feedPicture = xpp.getAttributeValue(null, "url");
                                 currentTag = RSSXMLTag.CONTENT;
@@ -219,7 +234,7 @@ public class FeedsItemsActivity extends AppCompatActivity implements SwipeRefres
                     } else if (eventType == XmlPullParser.END_TAG) {
                         if (xpp.getName().equals("item")) {
                             Date dateGMT=calendar.getTime();
-                            Date postDate = dateFormat.parse(pdData.feedDate);
+                            Date postDate = tryParse(pdData.feedDate);
                             long milliseconds = postDate.getTime();
                             long now = dateGMT.getTime();
                             pdData.feedDate = (String) DateUtils.getRelativeTimeSpanString(milliseconds, now, DateUtils.MINUTE_IN_MILLIS);
@@ -277,9 +292,7 @@ public class FeedsItemsActivity extends AppCompatActivity implements SwipeRefres
             } catch (XmlPullParserException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-            }   catch (ParseException e) {
-                e.printStackTrace();
-            }catch (IOException e) {
+            } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
